@@ -19,6 +19,7 @@ function InternalPage(){
                 title: 'Update Product',
                 bodyType: MODAL_BODY_TYPES.UPDATE_PRODUCT,
                 extraObject: selectedProduct,
+                size: 'lg',
             })
         );
     };
@@ -33,6 +34,7 @@ function InternalPage(){
         openModal({
         title: 'Add Product',
         bodyType: MODAL_BODY_TYPES.ADD_PRODUCT,
+        size: 'lg',
         })
     );
     };
@@ -62,7 +64,9 @@ function InternalPage(){
                 <th>Sale</th>
                 <th>Price Sale</th>
                 <th>Quantity</th>
+                <th>Sold</th>
                 <th>Total Rating</th>
+                <th>Enable</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,7 +97,9 @@ function InternalPage(){
                     <td>{product.sale}</td>
                     <td>{product.priceSale}</td>
                     <td>{product.quantity}</td>
+                    <td>{product.sold}</td>
                     <td>{product.totalrating}</td>
+                    <td>{product.enable.toString()}</td>
                     <td>
                         <button className="icon-btn" onClick={() => handleUpdateProduct(product._id)}>
                             <ArrowPathIcon className="h-5 w-5" />

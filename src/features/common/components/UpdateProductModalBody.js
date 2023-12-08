@@ -20,6 +20,57 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
     closeModal();
   };
 
+  const handleImageChange = (index, value) => {
+    const updatedImages = [...updatedProductDetails.images];
+    updatedImages[index] = { ...updatedImages[index], url: value };
+    setUpdatedProductDetails((prevDetails) => ({
+      ...prevDetails,
+      images: updatedImages,
+    }));
+  };
+  
+  const handleAddImage = () => {
+    setUpdatedProductDetails((prevDetails) => ({
+      ...prevDetails,
+      images: [...prevDetails.images, { url: '' }],
+    }));
+  };
+  
+  const handleRemoveImage = (index) => {
+    const updatedImages = [...updatedProductDetails.images];
+    updatedImages.splice(index, 1);
+    setUpdatedProductDetails((prevDetails) => ({
+      ...prevDetails,
+      images: updatedImages,
+    }));
+  };
+  
+
+  const handleSpecChange = (index, field, value) => {
+    const updatedSpecs = [...updatedProductDetails.specs];
+    updatedSpecs[index] = { ...updatedSpecs[index], [field]: value };
+    setUpdatedProductDetails((prevDetails) => ({
+      ...prevDetails,
+      specs: updatedSpecs,
+    }));
+  };
+
+  const handleAddSpec = () => {
+    setUpdatedProductDetails((prevDetails) => ({
+      ...prevDetails,
+      specs: [...prevDetails.specs, { k: '', v: '' }],
+    }));
+  };
+
+  const handleRemoveSpec = (index) => {
+    const updatedSpecs = [...updatedProductDetails.specs];
+    updatedSpecs.splice(index, 1);
+    setUpdatedProductDetails((prevDetails) => ({
+      ...prevDetails,
+      specs: updatedSpecs,
+    }));
+  };
+
   const handleChange = (field, value) => {
     setUpdatedProductDetails((prevDetails) => ({
       ...prevDetails,
@@ -32,6 +83,7 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
       <p className="text-xl mt-8 text-center">Update the product details:</p>
 
       <div className="mb-4">
+        <label className="label">Code:</label>
         <input
           type="text"
           className="input input-bordered w-full mb-4"
@@ -39,6 +91,7 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
           value={updatedProductDetails.code}
           onChange={(e) => handleChange('code', e.target.value)}
         />
+        <label className="label">Product Name:</label>
         <input
           type="text"
           className="input input-bordered w-full mb-4"
@@ -46,12 +99,14 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
           value={updatedProductDetails.name}
           onChange={(e) => handleChange('name', e.target.value)}
         />
+        <label className="label">Description:</label>
         <textarea
           className="textarea textarea-bordered w-full mb-4"
           placeholder="Product Description"
           value={updatedProductDetails.description}
           onChange={(e) => handleChange('description', e.target.value)}
         ></textarea>
+        <label className="label">Short Description:</label>
         <input
           type="text"
           className="input input-bordered w-full mb-4"
@@ -63,14 +118,27 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
 
       <div className="mb-4">
         <label className="label">Product Images:</label>
-        <input
-          type="text"
-          className="input input-bordered w-full mb-2"
-          placeholder="Image URL"
-          value={updatedProductDetails.images}
-          onChange={(e) => handleChange('images', [e.target.value])}
-        />
-        <p className="text-xs text-gray-500 mb-2">Enter image URLs separated by commas</p>
+        {updatedProductDetails.images.map((image, index) => (
+          <div key={index} className="mb-2">
+            <input
+              type="text"
+              className="input input-bordered w-full mb-2"
+              placeholder="Image URL"
+              value={image.url}
+              onChange={(e) => handleImageChange(index, e.target.value)}
+            />
+            <button
+              className="btn btn-outline btn-sm ml-2"
+              onClick={() => handleRemoveImage(index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button className="btn btn-primary btn-sm" onClick={handleAddImage}>
+          Add Image
+        </button>
+        <p className="text-xs text-gray-500 mb-2">Enter image URLs</p>
       </div>
 
       <div className="mb-4">
@@ -118,20 +186,30 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
               className="input input-bordered w-full mb-2"
               placeholder="Key"
               value={spec.k}
-              onChange={(e) => handleChange(`specs.${index}.k`, e.target.value)}
+              onChange={(e) => handleSpecChange(index, 'k', e.target.value)}
             />
             <input
               type="text"
               className="input input-bordered w-full"
               placeholder="Value"
               value={spec.v}
-              onChange={(e) => handleChange(`specs.${index}.v`, e.target.value)}
+              onChange={(e) => handleSpecChange(index, 'v', e.target.value)}
             />
+            <button
+              className="btn btn-outline btn-sm ml-2"
+              onClick={() => handleRemoveSpec(index)}
+            >
+              Remove
+            </button>
           </div>
         ))}
+        <button className="btn btn-primary btn-sm" onClick={handleAddSpec}>
+          Add Specification
+        </button>
       </div>
 
       <div className="mb-4">
+        <label className="label">Price:</label>
         <input
           type="number"
           className="input input-bordered w-full mb-2"
@@ -139,6 +217,7 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
           value={updatedProductDetails.price}
           onChange={(e) => handleChange('price', e.target.value)}
         />
+        <label className="label">Quantity:</label>
         <input
           type="number"
           className="input input-bordered w-full"
@@ -146,6 +225,17 @@ function UpdateProductModalBody({ extraObject, closeModal }) {
           value={updatedProductDetails.quantity}
           onChange={(e) => handleChange('quantity', e.target.value)}
         />
+      </div>
+      <div className="mb-4">
+        <label className="label">Select Order Status:</label>
+        <select
+          className="select select-bordered w-full"
+          value={updatedProductDetails.enable}
+          onChange={(e) => handleChange('enable', e.target.value)}
+        >
+          <option value="Enable">Enable</option>
+          <option value="Unable">Unable</option>
+        </select>
       </div>
 
       <div className="modal-action mt-4">

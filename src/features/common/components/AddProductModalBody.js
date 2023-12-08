@@ -12,7 +12,7 @@ function AddProductModalBody({ closeModal }) {
     images: [],
     category: '',
     room: '',
-    specs: [],
+    specs: [{ k: '', v: '' }],
     price: 0,
     quantity: 0,
   });
@@ -36,6 +36,31 @@ function AddProductModalBody({ closeModal }) {
     setProductDetails((prevDetails) => ({
       ...prevDetails,
       [field]: value,
+    }));
+  };
+
+  const handleSpecChange = (index, field, value) => {
+    const updatedSpecs = [...productDetails.specs];
+    updatedSpecs[index] = { ...updatedSpecs[index], [field]: value };
+    setProductDetails((prevDetails) => ({
+      ...prevDetails,
+      specs: updatedSpecs,
+    }));
+  };
+  
+  const handleAddSpec = () => {
+    setProductDetails((prevDetails) => ({
+      ...prevDetails,
+      specs: [...prevDetails.specs, { k: '', v: '' }],
+    }));
+  };
+  
+  const handleRemoveSpec = (index) => {
+    const updatedSpecs = [...productDetails.specs];
+    updatedSpecs.splice(index, 1);
+    setProductDetails((prevDetails) => ({
+      ...prevDetails,
+      specs: updatedSpecs,
     }));
   };
 
@@ -126,22 +151,37 @@ function AddProductModalBody({ closeModal }) {
 
       <div className="mb-4">
         <label className="label">Specifications:</label>
-        <div className="mb-2">
-          <input
-            type="text"
-            className="input input-bordered w-full mb-2"
-            placeholder="Key"
-            value={productDetails.specs[0]?.k || ''}
-            onChange={(e) => handleChange('specs', [{ k: e.target.value, v: '' }])}
-          />
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Value"
-            value={productDetails.specs[0]?.v || ''}
-            onChange={(e) => handleChange('specs', [{ k: productDetails.specs[0]?.k, v: e.target.value }])}
-          />
-        </div>
+        {productDetails.specs.map((spec, index) => (
+          <div key={index} className="mb-2">
+            <div className="flex items-center">
+              <input
+                type="text"
+                className="input input-bordered w-full mb-2"
+                placeholder="Key"
+                value={spec.k}
+                onChange={(e) => handleSpecChange(index, 'k', e.target.value)}
+              />
+              {productDetails.specs.length > 1 && (
+                <button
+                  className="btn btn-outline btn-square ml-2"
+                  onClick={() => handleRemoveSpec(index)}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              placeholder="Value"
+              value={spec.v}
+              onChange={(e) => handleSpecChange(index, 'v', e.target.value)}
+            />
+          </div>
+        ))}
+        <button className="btn btn-outline" onClick={handleAddSpec}>
+          Add Specification
+        </button>
       </div>
 
       <div className="mb-4">

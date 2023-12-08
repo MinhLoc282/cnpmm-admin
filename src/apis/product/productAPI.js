@@ -4,7 +4,7 @@ const endpoint = '/product';
 
 export default {
   async getAllProduct() {
-    const path = `${endpoint}/getAllProduct`;
+    const path = `${endpoint}/admin/getAll`;
 
     const response = await axiosClient.get(path);
 

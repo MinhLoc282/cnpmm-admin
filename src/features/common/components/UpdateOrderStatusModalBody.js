@@ -33,7 +33,8 @@ function UpdateOrderStatusModalBody({ closeModal, extraObject }) {
           onChange={(e) => setUpdatedStatus(e.target.value)}
         >
           <option value="Processing">Processing</option>
-          <option value="Shipped">Shipped</option>
+          <option value="Dispatched">Dispatched</option>
+          <option value="Cancelled">Cancelled</option>
           <option value="Delivered">Delivered</option>
         </select>
       </div>
